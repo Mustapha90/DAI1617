@@ -1,0 +1,125 @@
+{% extends "restaurantes/layout.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="col-md-9">
+{% if success == 1 %}
+      <div class="alert alert-info alert-dismissable">
+        <a class="panel-close close" data-dismiss="alert">×</a> 
+        <i class="fa fa-coffee"></i>
+        Los datos se han guardado correctamente
+      </div>
+{% endif %}
+
+
+    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>¿Está seguro de que desea eliminar permanentemente el elemento especificado de la base de datos?</p>
+                    <p class="debug-url"></p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-danger btn-ok">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+	<div class="row">
+        <div class="col-sm-7 col-sm-offset-2">
+            <div id="imaginary_container"> 
+<form method="post" action="">
+{% csrf_token %}
+                <div class="input-group stylish-input-group">
+                    <input type="search" class="form-control" value = "{{ult_busqueda}}" name="search" placeholder="Buscar" >
+                    <span class="input-group-addon">
+                        <button type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>  
+                    </span>
+                </div>
+            </div>
+        </div>
+
+	</div>
+
+
+{% if length == 0 %}
+<br>
+La búsqueda no obtuvo ningún resultado.
+
+
+
+
+{% else %}
+
+
+    <div class="row col-md-12 col-md-offset-0 custyle">
+    <table class="table table-striped custab">
+    <thead>
+<br>
+           {% if user.is_authenticated %}
+    <a href="{% url 'aniadir_restaurante' %}" class="btn btn-primary btn-xs pull-right"><b>+</b> Añadir restaurante</a>
+		{% endif %}
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Cuisine</th>
+            <th>Ciudad</th>
+			<th>Dirección</th>
+			<th>Coordenadas</th>
+           {% if user.is_authenticated %}
+            <th class="text-center">Acción</th>
+		{% endif %}
+        </tr>
+    </thead>
+{% for res in rest %}
+	<tr>
+		<td>{{ res.restaurant_id}}</td>
+        <td>{{ res.name }}</td>
+        <td>{{ res.cuisine }}</td>
+        <td>{{ res.borough }}</td>
+		<td>{{ res.address.building}}, {{ res.address.street}}, {{ res.address.zipcode}}</td>
+		<td>{{ res.address.coord}}</td>
+           {% if user.is_authenticated %}
+        <td class="text-center"><a class='btn btn-info btn-xs' href="{% url 'editar_restaurante' %}?id_rest={{ res.restaurant_id }}" data-toggle="tooltip" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
+
+
+<a id = "{{ res.restaurant_id }}" data-href="{% url 'eliminar_restaurante' %}?id_rest={{ res.restaurant_id }}" data-toggle="modal" data-target="#confirm-delete" data-toggle="tooltip" title="Eliminar" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-remove"></span></a>
+
+
+</td>
+	</tr>
+		{% endif %}
+{% endfor %}
+
+    </table>
+
+
+    </div>
+		{% endif %}
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+
+    <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+
+
+
+    <script data-require="bootstrap@*" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+<script>
+	$('#confirm-delete').on('show.bs.modal', function(e) {
+	$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+	});
+</script>
+
+</div>
+{% endblock %}

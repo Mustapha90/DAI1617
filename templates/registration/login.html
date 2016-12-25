@@ -1,0 +1,40 @@
+{% extends "restaurantes/layout.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-md-offset-3">
+            <h1 class="text-center login-title"><strong>Iniciar sesión</strong></h1>
+            <div class="account-wall">
+
+                <form class="form-signin" method="post" action=".">
+  
+                              {% csrf_token %}
+<!-- Mostrar errores -->
+
+{% if form.errors %}
+    <div class="flash">{{ form.non_field_errors }}</div>
+{% endif %}
+
+<br>
+
+
+ {{form.username|add_class:"form-control"|attr:"placeholder:Username"}}
+ {{form.password|add_class:"form-control"|attr:"placeholder:Password"}}
+
+
+<br>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+                <input type="hidden" name="next" value="/restaurantes/" />
+      </form>
+
+
+            </div>
+<br>
+            <a href="{% url 'registration_register' %}" class="text-center new-account">Aún no eres miembro? Registrase</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

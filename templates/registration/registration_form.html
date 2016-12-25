@@ -1,0 +1,61 @@
+{% extends "restaurantes/layout.html" %}
+
+{% load widget_tweaks %}
+
+
+{% block content %}
+
+<br>
+<br>
+<div class="col-md-8 col-sm-offset-1">
+<div class="row">
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h3 class="panel-title"><strong>Registrarse</strong></h3>
+            </div>
+            <div class="panel-body">
+
+        <form class="form-horizontal" method="post" action=".">
+<fieldset>
+                {% csrf_token %}
+
+
+
+<!-- Mostrar errores -->
+ {% for field in form %}
+{% if field.errors %}
+    <div class="flash">{{ field.errors }}</div>
+{% endif %}
+{% endfor %}
+
+
+
+ {% for field in form %}
+
+
+<!-- Text input-->
+<div class="form-group">
+      <label class="col-sm-offset-1 control-label" for="{{ field.html_name }}"> {{ field.label }}</label>
+
+
+  <div class="col-md-10 col-sm-offset-1">
+<br>
+ {{field|add_class:"form-control input-md"}}
+  <span class="help-block">{{field.help_text}}</span>  
+  </div>
+</div>
+{% endfor %}
+
+    <div class="control-group">
+      <!-- Button -->
+      <div class="col-sm-offset-1 controls">
+        <button class="btn btn-primary">Register</button>
+      </div>
+    </div>
+</fieldset>
+        </form>
+
+  </div>
+        </div>
+        </div>
+{% endblock %}

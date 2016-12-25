@@ -1,0 +1,59 @@
+{% extends "restaurantes/layout.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC9xnfVVe-D3DHS1zqRco-pO9OPG7AMxac&sensor=false"></script>
+    <script type="text/javascript" src="{% static 'js/geocode.js'%}"></script>
+<br>
+<div class="col-md-8 col-sm-offset-1">
+    <div id="signupbox" class="mainbox col-md-9 col-md-offset-0 col-sm-8 col-sm-offset-0">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <div class="panel-title">Añadir restaurante</div>
+            </div>  
+            <div class="panel-body" >
+
+
+
+<form class="form-horizontal" action="{% url 'aniadir_restaurante' %}" method='post'>{% csrf_token %}
+
+    {% for field in form %}
+        <div class="submit-link-row">{{ field.label_tag }} <br> {{ field }}</div>
+
+
+        {% if form.errors %}
+            {% for error in field.errors %}
+    			<p1 style="color:red;">{{ error|escape }}</p1>
+            {% endfor %}
+        {% endif %}
+
+        {% if field.help_text %}
+        <p class="help-block">{{ field.help_text|safe }}</p>
+        {% endif %}
+<br>
+    {% endfor %}
+<br>
+
+
+
+<input type="submit" name="enviar" value="Añadir" class="btn btn-primary btn btn-info" id="submit-id-signup" />
+</form>
+
+                            
+                    </form>
+
+                </form>
+            </div>
+        </div>
+    </div> 
+</div>
+    
+
+
+
+
+
+</div>            
+{% endblock %}
