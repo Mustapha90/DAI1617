@@ -2,12 +2,10 @@
 
 
 
-##Despliegue de la aplicación
+###Despliegue de la aplicación
 
-El despliegue se ha realizado en el PaaS Heroku a continuación se explicarán los pasos seguidos.
+La aplicación que vamos desplegar es de la práctica 7, el despliegue se ha realizado en el PaaS Heroku, a continuación se explicarán los pasos seguidos.
 
-
-##Preparación de la aplicación para el despliegue
 
 ###Configuración de las bases de datos
 
@@ -25,11 +23,11 @@ Ahora importamos los datos de restaurantes a la base de datos remota, como hicim
 
 Ya podemos trabajar con la base de datos.
 
-####Configuración del contenido estático
+###Configuración del contenido estático
 
 Hay que añadir la configuración correcta para que nuestra aplicación podrá servir contenido estático en el PaaS.
 
-Para lograrlo usaremos ``whitenoise``, editamos el fichero ``wsgi.py`` de nuestra aplicación
+Para lograrlo usaremos el paquete ``whitenoise``, editamos el fichero ``wsgi.py`` de nuestra aplicación
 
 ```python
 import os
@@ -50,9 +48,9 @@ Añadimos la siguiente linea en el fichero de configuración ``settings.py``
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 ```
 
-####Configuración de las variables de entorno
+###Configuración de las variables de entorno
 
-Para configurar las variables de entorno en el PaaS usaremos los paquetes python-decouple y dj-database-url.
+Para configurar las variables de entorno en el PaaS usaremos los paquetes ``python-decouple`` y ``dj-database-url``.
 
 Editamos el fichero de configuración ``settings.py``:
 
@@ -70,10 +68,10 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 # Variable que indica que el entorno es Heroku
 ON_HEROKU = 'ON_HEROKU' in os.environ
 
-# Configuración para Heroku
+# Configuración para el entorno de produccón
 if ON_HEROKU:  
 
-    # Conectarse a la base de datos remota usando la variable de entorno MONGO_URI
+    # Conexión a la base de datos remota usando la variable de entorno MONGO_URI
     CLIENT = MongoClient(config('MONGO_URI'))
     DB = CLIENT.restaurantes
 
@@ -83,27 +81,27 @@ if ON_HEROKU:
     # Deshabilitar la depuración
     DEBUG = config('DEBUG', default=False, cast=bool)
 
-    # Configuración de la base de datos Postgres
+    # Configuración de la base de datos Postgres usando la variable de entorno DATABASE_URL
     DATABASES = {
           'default': dj_database_url.config(
-          default=config('DATABASE_URL')
+           default=config('DATABASE_URL')
           )
     }
 
     # Permitir el acceso externo
     ALLOWED_HOSTS = ['*']
 
-    #Obtener la varaible de entorno que contiene la clave de la api de google
+    #Obtener la varaible de entorno que contiene la clave de la api de google maps
     API_KEY = config('API_KEY')
 
-# Configuración normal
+#Configuración para el entorno de desarrollo
 else:
     # Usamos la base de datos local de mongo
     CLIENT = MongoClient()
     DB = CLIENT.test
 
     # Clave secreta
-    SECRET_KEY = 'xxxxxxxx'
+    SECRET_KEY = '-------------'
 
     # No permitir el acceso externo
     ALLOWED_HOSTS = []
@@ -120,14 +118,14 @@ else:
     }
     
     # Clave de la api de google
-    API_KEY='xxxxxxxxxxxx'
+    API_KEY='----------------'
 
 ...
 ...
 ...
 ```
 
-##Ficheros de configuración del PaaS
+###Ficheros de configuración del PaaS
 
 Para desplegar la aplicación necesitamos los siguientes ficheros de configuración:
 
@@ -159,13 +157,13 @@ python-2.7.12
 
 **``Procfile``**
 
-Contiene la orden que se usará para ejecutar la aplicación
+Contiene la orden que se usará para ejecutar la aplicación, usaremos el servidor web wsgi ``gunicorn``
 
 ```
 web: gunicorn tango_with_django_project.wsgi --log-file -
 ```
 
-##Despliegue en Heroku
+###Despliegue en Heroku
 
 Ya tenemos la configuración necesaria para desplegar la aplicación en heroku.
 
