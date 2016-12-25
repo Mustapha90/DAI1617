@@ -68,9 +68,10 @@ def get_codpostal(address):
     url_request = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s" % (address, settings.API_KEY)
     result = requests.get(url_request)
     data = result.json()
-    for element in data['results'][0]['address_components']:
-        if element['types'][0] == 'postal_code':
-            zipcode = element['long_name']
+    if data['status'] != 'ZERO_RESULTS':
+        for element in data['results'][0]['address_components']:
+            if element['types'][0] == 'postal_code':
+                zipcode = element['long_name']
 
     return zipcode
 
