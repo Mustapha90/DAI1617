@@ -66,7 +66,6 @@ class RestForm(forms.Form):
 def get_codpostal(address):
     zipcode = -1
     url_request = "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s" % (address, settings.API_KEY)
-    print url_request
     result = requests.get(url_request)
     data = result.json()
     for element in data['results'][0]['address_components']:
