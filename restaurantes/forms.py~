@@ -19,7 +19,7 @@ class RestForm(forms.Form):
    ciudad = forms.CharField(widget=myClass,max_length = 100,label="Ciudad")
    edificio = forms.CharField(widget=myClass,max_length = 100, label="Edificio")
    calle = forms.CharField(widget=myClass,max_length = 100, label="Calle")
-   codpostal = forms.CharField(widget=myClass,max_length = 100, label="Código postal".encode('utf8'))
+   codpostal = forms.CharField(widget=myClass,max_length = 100, label="Código postal")
    latitud = forms.FloatField(widget=myClass,min_value=-90.0, max_value=90.0, label="Latitud")
    longitud = forms.FloatField(widget=myClass,min_value=-180.0, max_value=180.0, label="Longitud")
    restaurante = ''
